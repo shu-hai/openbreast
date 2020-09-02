@@ -10,6 +10,8 @@ function f = features_GLCM(im, flist, mask, par)
 % 
 % S. Pertuz, G. F. Torres
 % Jul11/2017
+% modified by Hai Shu Sep2/2020 based on the paper: Parenchymal texture analysis in digital mammography: A fully automated pipeline for breast cancer risk assessment
+
 
 % Parameters for GLCM %%%%%%%%
 if nargin<4
