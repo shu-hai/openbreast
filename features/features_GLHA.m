@@ -44,10 +44,10 @@ for n = 1:length(flist)
             f(n) = prctile(x, 95);
         case 'ip05mean'
             ip5 = prctile(x, 5);
-            f(n) = mean(x(x<=ip5));
+            f(n) = mean(x(x<=ip5)); %by Hai
         case 'ip95mean'
             ip95 = prctile(x, 95);
-            f(n) = mean(x(x>=ip95));
+            f(n) = mean(x(x>=ip95)); %by Hai
         case 'iske'
             f(n) = skewness(double(x));
             %if isnan(f(n)), f(n)=0; end
