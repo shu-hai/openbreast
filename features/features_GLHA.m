@@ -13,6 +13,7 @@ function f = features_GLHA(im, flist, mask)
 % 
 % S. Pertuz
 % Jul11/2017
+% modified by Hai Shu Sep2/2020 based on the paper: Parenchymal texture analysis in digital mammography: A fully automated pipeline for breast cancer risk assessment
 
 if nargin<3
     mask = true(size(im));
@@ -29,8 +30,10 @@ for n = 1:length(flist)
             f(n) = max(x);
         case 'iavg'
             f(n) = mean(x);
+        case 'isum'
+            f(n) = sum(x); %by Hai
         case 'ient'
-            c = hist(x, 256);
+            c = hist(x, 128);%by Hai
             p = c/sum(c);
             f(n) = -sum(p(p~=0).*log2(p(p~=0)));
         case 'istd'
@@ -39,28 +42,18 @@ for n = 1:length(flist)
             f(n) = prctile(x, 5);
         case 'ip95'
             f(n) = prctile(x, 95);
-        case 'ip30'
-            f(n) = prctile(x, 30);
-        case 'ip70'
-            f(n) = prctile(x, 70);
-        case 'iba1'
-            p05 = double(prctile(x, 5));
-            p95 = double(prctile(x, 95));
-            u   = double(mean(x));
-            f(n) = (p95 -u + eps)/(u-p05 + eps);
-        case 'iba2'
-            p30 = double(prctile(x, 30));
-            p70 = double(prctile(x, 70));
-            u   = double(mean(x));
-            f(n) = (p70 -u + eps)/(u-p30 + eps);
+        case 'ip05mean'
+            ip5 = prctile(x, 5);
+            f(n) = mean(x(x<=ip5));
+        case 'ip95mean'
+            ip95 = prctile(x, 95);
+            f(n) = mean(x(x>=ip95));
         case 'iske'
             f(n) = skewness(double(x));
             %if isnan(f(n)), f(n)=0; end
         case 'ikur'
             f(n) = kurtosis(double(x));
             %if isnan(f(n)), f(n)=0; end
-        case 'iran'
-            f(n) = range(double(x));
         otherwise
             error('unknown feature %s', upper(flist{n}))
     end
